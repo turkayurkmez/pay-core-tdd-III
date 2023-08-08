@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using eshop.API.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eshop.API.Controllers
 {
@@ -6,9 +7,24 @@ namespace eshop.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly IProductService productService;
+
+        public ProductsController(IProductService productService)
+        {
+            this.productService = productService;
+        }
+        [HttpGet("{name}")]
         public IActionResult Search(string name)
         {
-            return Ok(new { message = "This is for success...." });
+
+            var filteredProducts = productService.SearchProductsByName(name);
+            return Ok(filteredProducts);
+        }
+
+        [HttpPost]
+        public IActionResult Create(Product product)
+        {
+            return Ok();
         }
     }
 }
